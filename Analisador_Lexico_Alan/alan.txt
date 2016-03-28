@@ -1,0 +1,55 @@
+const
+{
+int a=5,b=3;
+string b="abs";
+char b=3;
+}
+int b,c,d;
+char a;
+float l,d,c;
+
+void main ()
+{
+int b,c,d;
+char a;
+float l,d,c;
+if(a.a==3+a())
+{
+
+}
+}
+
+class a>a
+{
+const
+{
+int a=5,b=3;
+string b="abs";
+char b=3;
+}
+
+int a,b,c;
+
+int a()
+{
+
+return a;
+}
+
+void a(int a[3],int b, b a)
+{
+int a,b,c;
+b=3;
+
+}
+}
+
+class a
+{
+int a;
+a a;
+
+
+}
+
+

@@ -1,0 +1,23 @@
+void palavra_reservada 1
+main palavra_reservada 1
+( delimitador 1
+) delimitador 1
+{ delimitador 2
+/ operador 23
+if palavra_reservada 24
+( delimitador 24
+12 numero 24
+/ operador 24
+3 numero 24
+== operador 24
+a id 24
+. operador 24
+a id 24
+( delimitador 24
+) delimitador 24
+) delimitador 24
+{ delimitador 25
+} delimitador 27
+} delimitador 29
+
+Nao teve erros
