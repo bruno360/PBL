@@ -1,8 +1,8 @@
 const
 {
-int a=5,b=3;
-string b="abs";
-char b=3;
+int a=5,f=3;
+string x="abs";
+char k=3;
 }
 int b,c,d;
 char a;
@@ -19,7 +19,7 @@ if(a.a==3+a())
 }
 }
 
-class a>a
+class r>a
 {
 const
 {
@@ -44,7 +44,7 @@ b=3;
 }
 }
 
-class a
+class s
 {
 int a;
 a a;

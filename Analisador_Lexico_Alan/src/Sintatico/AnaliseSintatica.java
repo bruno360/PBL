@@ -3,9 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package analisador_lexico_alan;
+package Sintatico;
 
 
+import TabeladeSimbolos.*;
+import analisador_lexico_alan.Token;
+import analisador_lexico_alan.TokenAtaul;
 import java.util.*;
 
 /**
@@ -14,21 +17,29 @@ import java.util.*;
  */
 public class AnaliseSintatica {
 private LinkedList <Token> list;
-private int size;
+private int size,deslocamento;
 private int controle;
 private boolean controleConst;
 private TokenAtaul token=new TokenAtaul();
 private int teste;
 private long errorLinha;
-
-    public AnaliseSintatica() {
+private String chamouConst,tipoconst;
+private TabeladeSimbolos tabela=new TabeladeSimbolos();    
+private LinkedList<ErroSintatico> erro=new LinkedList<>();
+private Bloco corrente;
+public AnaliseSintatica() {
     }
     
     public void requesitarAnalise(LinkedList <Token> liste)
     {
+        erro.clear();
+        tabela.limparTabela();
+        tabela.costruirTabela();
+        corrente=(Bloco)this.tabela.getBlocos().getLi().getFirst();
+        tipoconst=chamouConst="";
         list=liste;
         size=list.size();
-        controle=0;
+        deslocamento=controle=0;
         controleConst=false;
         teste=0;
         arquivo();
@@ -42,6 +53,7 @@ private long errorLinha;
         if(controle>=size)
         {
             token.set("$", null);
+            tabela.imprimir();
         }else
         {
             Token t=list.get(controle); 
@@ -67,7 +79,7 @@ private long errorLinha;
             {
                 token.set(t.getToken(), t);          
             }      
-         System.out.println("token---> "+token.getStokem()+" controle--> "+controle+"        "+t.getToken()+"        linha real  "+t.getLinha());
+      //   System.out.println("token---> "+token.getStokem()+" controle--> "+controle+"        "+t.getToken()+"        linha real  "+t.getLinha());
             
         }
         
@@ -107,7 +119,8 @@ private long errorLinha;
         avancarToken();
         if(token.getStokem().equals("const"))
         {
-            //System.out.println("arquivo "+"constantes");
+            //System.out.println("arquivo "+"constantes");           
+            chamouConst="arquivo";
             constantes();
             variaveis();
             pre_main();
@@ -155,12 +168,14 @@ private long errorLinha;
     
     public void constantes() // Vazio de constantes é variaveis
     {    
-        if(token.getStokem().equals("const")){
-          //  System.out.println("constantes");                      
-            Const();            
-            constantes();
-        }
-    
+        if(token.getStokem().equals("const")){            
+             Bloco x=new Bloco("BlocoConstantes",this.corrente); 
+             this.corrente.getLi().add(x);  
+             corrente=x;             
+             Const();
+             corrente=(Bloco)this.tabela.getBlocos().getLi().getFirst();
+             constantes();
+        }   
     }
     
     
@@ -679,20 +694,25 @@ private long errorLinha;
     {
        
         if(token.getStokem().equals("class"))
-        {   
-            avancarToken();   
+        {    
+             avancarToken();
             if(token.getStokem().equals("Identifier"))
             {         
-                avancarToken();
+                corrente=(Bloco)this.tabela.getBlocos().getLi().getFirst();
+                corrente.getLi().add(new Identificador_2(token.getToken().getToken(),token.getToken().getLinha(),"class",0,corrente)); 
+                avancarToken();               
                 this.expressao_heranca();
                 if(token.getStokem().equals("{"))
                 {
-                  
-                    avancarToken();
+                    Bloco x=new Bloco("BlocodeClasse",this.corrente); 
+                    this.corrente.getLi().add(x);  
+                    corrente=x;  
+                    this.avancarToken();                   
                     conteudo_classe();
                     if(token.getStokem().equals("}"))
                     {
-                        avancarToken();                           
+                        avancarToken();
+                        corrente=(Bloco)this.tabela.getBlocos().getLi().getFirst();
                     }
                         
                 }            
@@ -722,7 +742,11 @@ private long errorLinha;
     public void conteudo_classe(){
         if(token.getStokem().equals("const"))
         {
+            Bloco x=new Bloco("BlocoConstantes",this.corrente); 
+            this.corrente.getLi().add(x);  
+            corrente=x;             
             this.Const();
+            corrente=x.getPai();
             this.conteudo_classe();        
         }else if(token.getStokem().equals("}"))
         {
@@ -745,28 +769,26 @@ private long errorLinha;
         
         if(token.getStokem().equals("const"))
         {
-            avancarToken();
+            avancarToken();            
             if(token.getStokem().equals("{"))
             {
-                avancarToken();
-                if(token.getStokem().equals("int")  || token.getStokem().equals("float") || token.getStokem().equals("string") || token.getStokem().equals("char"))
-                {
-                  //  System.out.println(1);
-                    bloco_constante();
-                    if(token.getStokem().equals("}"))
-                    {
-                   // System.out.println(2);
-                    avancarToken();                                  
-                    }
+                avancarToken();                
+            }else
+            {            
+                erro.add(new ErroSintatico("Faltou { no const",this.errorLinha));
+            }
+            if(token.getStokem().equals("int")  || token.getStokem().equals("float") || token.getStokem().equals("string") || token.getStokem().equals("char"))
+            {                
+                bloco_constante();
+                
+                if(token.getStokem().equals("}"))
+                {                  
+                   avancarToken();                                  
+                }
                 }else if(token.getStokem().equals("}"))
                 {
                     avancarToken();                                  
                 }
-            }else
-            {
-             // System.err.println("faltou { no const: "+this.errorLinha); 
-              
-            }
         }             
     }
     
@@ -775,11 +797,11 @@ private long errorLinha;
     {
     
         if(token.getStokem().equals("int")  || token.getStokem().equals("float") || token.getStokem().equals("string") || token.getStokem().equals("char") || token.getStokem().equals("bool") )
-        {     
-          //  System.out.println("bloco_constante");
-            tipo_primitivo();
-          //  System.out.println("bloco_constante____ "+token.getStokem());
+        {              
+            this.tipoconst=token.getStokem();
+            tipo_primitivo();          
             lista_const();
+            deslocamento=0;
         }else if(token.equals("}"))
         {                
                     
@@ -792,8 +814,10 @@ private long errorLinha;
     {
         if(token.getStokem().equals("Identifier"))
         {                        
-             avancarToken();
-            // System.out.println("lista_const "+token.getStokem());
+            deslocamento++;
+            System.out.println("cro______"+corrente.getNome());
+            corrente.getLi().add(new Identificador_2(token.getToken().getToken(),token.getToken().getLinha(),this.tipoconst,deslocamento,corrente)); 
+            avancarToken();             
             if(token.getStokem().equals("="))
             {                        
                  avancarToken();
@@ -1799,7 +1823,7 @@ private long errorLinha;
    
    }
     
-   //Inicialização de objetos
+   //Inicialização de objetos-Recuperado erro: ok
    public void inicializa_objeto()
    {
        if(token.getStokem().equals("new"))
@@ -1808,20 +1832,21 @@ private long errorLinha;
             if(token.getStokem().equals("Identifier"))
             {
                 avancarToken();
-                if(token.getStokem().equals(";"))
-                {
-                    avancarToken();   
-                    
-                }else
-                {
-                    //System.err.println("faltou ; no objeto: "+this.errorLinha);            
-                }
+            
             }else
             {
-                //System.err.println("faltou id no objeto: "+this.errorLinha);            
-            } 
-       
-       }
+                erro.add(new ErroSintatico("Faltou colocar o objeto que vai ser instanciado",this.errorLinha));                
+            }
+            
+            if(token.getStokem().equals(";"))
+            {
+                avancarToken();             
+            }else
+            {
+               erro.add(new ErroSintatico("Faltou colocar o ; no objeto que esta sendo instanciado",this.errorLinha));       
+            }
+            
+        }
    
    }
     
