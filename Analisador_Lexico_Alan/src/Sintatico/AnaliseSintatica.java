@@ -27,6 +27,7 @@ private String chamouConst,tipoconst;
 private TabeladeSimbolos tabela=new TabeladeSimbolos();    
 private LinkedList<ErroSintatico> erro=new LinkedList<>();
 private Bloco corrente;
+private boolean _main;
 public AnaliseSintatica() {
     }
     
@@ -40,12 +41,18 @@ public AnaliseSintatica() {
         list=liste;
         size=list.size();
         deslocamento=controle=0;
-        controleConst=false;
+        _main=controleConst=false;
         teste=0;
         arquivo();
         errorLinha=0;
     }
+
+    public LinkedList<ErroSintatico> getErro() {
+        return erro;
+    }
    
+    
+    
     //Funções auxiliares da AnaliseSintatica
     public void avancarToken( )
     {
@@ -53,7 +60,7 @@ public AnaliseSintatica() {
         if(controle>=size)
         {
             token.set("$", null);
-            tabela.imprimir();
+           // tabela.imprimir();
         }else
         {
             Token t=list.get(controle); 
@@ -79,7 +86,7 @@ public AnaliseSintatica() {
             {
                 token.set(t.getToken(), t);          
             }      
-      //   System.out.println("token---> "+token.getStokem()+" controle--> "+controle+"        "+t.getToken()+"        linha real  "+t.getLinha());
+            System.out.println("token---> "+token.getStokem()+" controle--> "+controle+"        "+t.getToken()+"        linha real  "+t.getLinha());
             
         }
         
@@ -168,6 +175,7 @@ public AnaliseSintatica() {
     
     public void constantes() // Vazio de constantes é variaveis
     {    
+        chamouConst="constantes";
         if(token.getStokem().equals("const")){            
              Bloco x=new Bloco("BlocoConstantes",this.corrente); 
              this.corrente.getLi().add(x);  
@@ -204,6 +212,7 @@ public AnaliseSintatica() {
      public void main()
     {
         //System.out.println(0);
+        _main=true;
         if(token.getStokem().equals("void"))
         {
             avancarToken();        
@@ -747,6 +756,7 @@ public AnaliseSintatica() {
             corrente=x;             
             this.Const();
             corrente=x.getPai();
+            chamouConst="conteudo_classe";
             this.conteudo_classe();        
         }else if(token.getStokem().equals("}"))
         {
@@ -775,20 +785,17 @@ public AnaliseSintatica() {
                 avancarToken();                
             }else
             {            
-                erro.add(new ErroSintatico("Faltou { no const",this.errorLinha));
+               erro.add(new ErroSintatico("Faltou { no const",this.errorLinha));
             }
-            if(token.getStokem().equals("int")  || token.getStokem().equals("float") || token.getStokem().equals("string") || token.getStokem().equals("char"))
-            {                
                 bloco_constante();
-                
+                System.err.println("aqui--------------)____"+token.getStokem());
                 if(token.getStokem().equals("}"))
                 {                  
                    avancarToken();                                  
-                }
-                }else if(token.getStokem().equals("}"))
+                }else
                 {
-                    avancarToken();                                  
-                }
+                   erro.add(new ErroSintatico("Faltou } no const",this.errorLinha));                
+                }           
         }             
     }
     
@@ -805,6 +812,40 @@ public AnaliseSintatica() {
         }else if(token.equals("}"))
         {                
                     
+        }else if(token.getStokem().equals("Identifier"))
+        {
+            this.erro.add(new ErroSintatico("Faltou o tipo em constantes",this.errorLinha));
+            while(true)
+            {
+                if(token.getStokem().equals("$"))
+                {
+                    break;
+                }else if(token.getStokem().equals(";"))
+                {
+                    this.avancarToken();
+                    bloco_constante();
+                    break;
+                }
+                else if(token.getStokem().equals("int")  || token.getStokem().equals("float") || token.getStokem().equals("string") || token.getStokem().equals("char") || token.getStokem().equals("bool"))
+                {
+                    bloco_constante();
+                    break;
+                }else if(token.getStokem().equals("}"))
+                {
+                    break;
+                }else if(this._main && this.seguinte(controle).equals("void") && this.seguinte(controle+1).equals("main") )
+                {
+                    break;
+                }  
+                else if(token.getStokem().equals("class"))
+                {
+                    break;
+                }else{     
+                    this.avancarToken();
+                }     
+                
+            }
+        
         }  
         
     }
@@ -824,10 +865,82 @@ public AnaliseSintatica() {
                  atribuicao_costante();
                  aux_declaracao();
                             
+            }else
+            {
+            this.erro.add(new ErroSintatico("Faltou o = na atribuição de constantes",this.errorLinha));
+            while(true)
+            {
+                if(token.getStokem().equals("$"))
+                {
+                    break;
+                }else if(token.getStokem().equals(","))
+                {
+                    aux_declaracao();
+                    break;
+                }                
+                else if(token.getStokem().equals(";"))
+                {
+                    this.avancarToken();
+                    bloco_constante();
+                    break;
+                }
+                else if(token.getStokem().equals("int")  || token.getStokem().equals("float") || token.getStokem().equals("string") || token.getStokem().equals("char") || token.getStokem().equals("bool"))
+                {
+                    bloco_constante();
+                    break;
+                }else if(token.getStokem().equals("}"))
+                {
+                    break;
+                }else if(this._main && this.seguinte(controle).equals("void") && this.seguinte(controle+1).equals("main") )
+                {
+                    break;
+                }  
+                else if(token.getStokem().equals("class"))
+                {
+                    break;
+                }else{     
+                    this.avancarToken();
+                }
+            }            
+            
             }      
         }else
         {
-           // System.err.println("faltou id no bloco de constante: "+this.errorLinha); 
+          this.erro.add(new ErroSintatico("Faltou o nome da variavel de constantes",this.errorLinha));
+            while(true)
+            {
+                if(token.getStokem().equals("$"))
+                {
+                    break;
+                }else if(token.getStokem().equals(","))
+                {
+                    aux_declaracao();
+                    break;
+                }                
+                else if(token.getStokem().equals(";"))
+                {
+                    this.avancarToken();
+                    bloco_constante();
+                    break;
+                }
+                else if(token.getStokem().equals("int")  || token.getStokem().equals("float") || token.getStokem().equals("string") || token.getStokem().equals("char") || token.getStokem().equals("bool"))
+                {
+                    bloco_constante();
+                    break;
+                }else if(token.getStokem().equals("}"))
+                {
+                    break;
+                }else if(this._main && this.seguinte(controle).equals("void") && this.seguinte(controle+1).equals("main") )
+                {
+                    break;
+                }  
+                else if(token.getStokem().equals("class"))
+                {
+                    break;
+                }else{     
+                    this.avancarToken();
+                }
+            }
         
         }  
     }
@@ -846,7 +959,32 @@ public AnaliseSintatica() {
                 lista_const();                
            }else
            {
-               //System.err.println("faltou , ou ; no bloco de constantes: "+this.errorLinha); 
+               this.erro.add(new ErroSintatico("Faltou um ; ou , constantes",this.errorLinha));
+            while(true)
+            {
+                if(token.getStokem().equals("$"))
+                {
+                    break;
+                }
+                else if(token.getStokem().equals("int")  || token.getStokem().equals("float") || token.getStokem().equals("string") || token.getStokem().equals("char") || token.getStokem().equals("bool"))
+                {
+                    bloco_constante();
+                    break;
+                }else if(token.getStokem().equals("}"))
+                {
+                    break;
+                }else if(this._main && this.seguinte(controle).equals("void") && this.seguinte(controle+1).equals("main") )
+                {
+                    break;
+                }  
+                else if(token.getStokem().equals("class"))
+                {
+                    break;
+                }else{     
+                    this.avancarToken();
+                }     
+                
+            }
            
            }
         
@@ -861,7 +999,7 @@ public AnaliseSintatica() {
            }
            else
            {
-             //System.err.println("faltou atribuir constante: "+this.errorLinha);
+             this.erro.add(new ErroSintatico("Atribuição incorreta",this.errorLinha));
            }
     }
     
@@ -1957,25 +2095,25 @@ public AnaliseSintatica() {
            if(token.getStokem().equals("("))
             {
                 avancarToken();
-                parametros_write();               
-                    if(token.getStokem().equals(")"))
-                    {
-                        avancarToken();
-                        if(token.getStokem().equals(";"))
-                        {
-                            avancarToken();                           
-                        }else
-                        {
-                           
-                        }
-                    
-                    }
-                   
-                
             }else
            {
-                //System.err.println("faltou ( no write: "+this.errorLinha); 
+               this.erro.add(new ErroSintatico("Faltou ( no write",this.errorLinha));
            }
+             parametros_write();  
+             if(token.getStokem().equals(")"))
+             {
+                avancarToken();
+             }else
+             {
+             this.erro.add(new ErroSintatico("Faltou ( no write",this.errorLinha));             
+             }   
+              if(token.getStokem().equals(";"))
+              {
+                    avancarToken();                           
+              }else
+              {
+                  this.erro.add(new ErroSintatico("Faltou ; no write",this.errorLinha));       
+              }        
         }    
    
    }

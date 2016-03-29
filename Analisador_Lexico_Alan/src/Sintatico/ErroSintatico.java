@@ -17,6 +17,16 @@ public class ErroSintatico {
         this.erro = erro;
         this.linhaReferencial = linhaReferencial;
     }
+
+    public String getErro() {
+        return erro;
+    }
+
+    public long getLinhaReferencial() {
+        return linhaReferencial;
+    }
+    
+    
     
     
 }

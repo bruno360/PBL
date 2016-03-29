@@ -154,15 +154,7 @@ a id 50
 
 Nao teve erros
 Faltou o = na atribuição de constantes   pela linha  4
-Faltou um ; ou , constantes   pela linha  7
-Faltou o = na atribuição de constantes   pela linha  7
-Faltou o = na atribuição de constantes   pela linha  7
-Faltou o = na atribuição de constantes   pela linha  7
-Faltou o = na atribuição de constantes   pela linha  8
-Faltou o = na atribuição de constantes   pela linha  9
-Faltou o = na atribuição de constantes   pela linha  9
-Faltou o = na atribuição de constantes   pela linha  9
-Faltou } no const   pela linha  11
+Faltou } no const   pela linha  7
 Faltou o nome da variavel de constantes   pela linha  26
 Faltou o = na atribuição de constantes   pela linha  31
 Faltou o = na atribuição de constantes   pela linha  31

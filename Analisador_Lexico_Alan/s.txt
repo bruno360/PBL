@@ -17,6 +17,7 @@ char palavra_reservada 5
 k id 5
 = operador 5
 3 numero 5
+} delimitador 6
 int palavra_reservada 7
 b id 7
 , delimitador 7
@@ -153,18 +154,9 @@ a id 50
 } delimitador 53
 
 Nao teve erros
-Faltou o = na atribuição de constantes   pela linha  4
-Faltou um ; ou , constantes   pela linha  7
-Faltou o = na atribuição de constantes   pela linha  7
-Faltou o = na atribuição de constantes   pela linha  7
-Faltou o = na atribuição de constantes   pela linha  7
-Faltou o = na atribuição de constantes   pela linha  8
-Faltou o = na atribuição de constantes   pela linha  9
-Faltou o = na atribuição de constantes   pela linha  9
-Faltou o = na atribuição de constantes   pela linha  9
-Faltou } no const   pela linha  11
-Faltou o nome da variavel de constantes   pela linha  26
-Faltou o = na atribuição de constantes   pela linha  31
-Faltou o = na atribuição de constantes   pela linha  31
-Faltou o = na atribuição de constantes   pela linha  31
-Faltou o = na atribuição de constantes   pela linha  33
+Faltou o = na atribuição de constantes   pela linha4
+Faltou o nome da variavel de constantes   pela linha26
+Faltou o = na atribuição de constantes   pela linha31
+Faltou o = na atribuição de constantes   pela linha31
+Faltou o = na atribuição de constantes   pela linha31
+Faltou o = na atribuição de constantes   pela linha33

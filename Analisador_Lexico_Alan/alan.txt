@@ -1,9 +1,9 @@
 const
 {
 int a=5,f=3;
-string x="abs";
-char k=3;
-}
+string x "abs";
+char k=3
+
 int b,c,d;
 char a;
 float l,d,c;
@@ -23,10 +23,10 @@ class r>a
 {
 const
 {
-int a=5,b=3;
+int =5,b=3;
 string b="abs";
 char b=3;
-}
+
 
 int a,b,c;
 

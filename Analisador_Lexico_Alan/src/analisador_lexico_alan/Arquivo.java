@@ -94,7 +94,19 @@ public class Arquivo {
             gravarArq.println("Nao teve erros");
         }
         as.requesitarAnalise(token.getLista());
-
+        if(as.getErro().size()>0)
+        {
+            int i=0;
+            while(i<as.getErro().size())
+            {
+                gravarArq.println(as.getErro().get(i).getErro()+"   pela linha  "+as.getErro().get(i).getLinhaReferencial());            
+                i++;
+            }
+        }else
+        {
+             gravarArq.println("Nao teve erros sintaticos");
+        
+        }
         arq.close();
         gravarArq.close();
 
