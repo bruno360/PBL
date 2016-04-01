@@ -3,9 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/bruno/Documents/NetBeansProjects/Analisador_Lexico_Alan/src/analisador_lexico_alan/Analisador_Lexico_Alan.java</file>
-            <file>file:/C:/Users/bruno/Documents/NetBeansProjects/Analisador_Lexico_Alan/src/analisador_lexico_alan/AnaliseSintatica.java</file>
-            <file>file:/C:/Users/bruno/Documents/NetBeansProjects/Analisador_Lexico_Alan/src/analisador_lexico_alan/TokenAtaul.java</file>
+            <file>file:/C:/Users/bruno/Documents/GitHub/PBL/Analisador_Lexico_Alan/src/Sintatico/AnaliseSintatica.java</file>
+            <file>file:/C:/Users/bruno/Documents/GitHub/PBL/Analisador_Lexico_Alan/src/TabeladeSimbolos/TabeladeSimbolos.java</file>
+            <file>file:/C:/Users/bruno/Documents/GitHub/PBL/Analisador_Lexico_Alan/src/Sintatico/ErroSintatico.java</file>
+            <file>file:/C:/Users/bruno/Documents/GitHub/PBL/Analisador_Lexico_Alan/src/TabeladeSimbolos/Identificador_2.java</file>
+            <file>file:/C:/Users/bruno/Documents/GitHub/PBL/Analisador_Lexico_Alan/src/TabeladeSimbolos/Bloco.java</file>
+            <file>file:/C:/Users/bruno/Documents/GitHub/PBL/Analisador_Lexico_Alan/src/analisador_lexico_alan/Arquivo.java</file>
         </group>
     </open-files>
 </project-private>

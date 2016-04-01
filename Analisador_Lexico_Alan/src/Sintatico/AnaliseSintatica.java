@@ -773,7 +773,7 @@ public AnaliseSintatica() {
    
    }
     
-    //Declaração de constantes
+    //Declaração de constantes-alterado
     public void Const()
     {
         
@@ -788,7 +788,7 @@ public AnaliseSintatica() {
                erro.add(new ErroSintatico("Faltou { no const",this.errorLinha));
             }
                 bloco_constante();
-                System.err.println("aqui--------------)____"+token.getStokem());
+               
                 if(token.getStokem().equals("}"))
                 {                  
                    avancarToken();                                  
@@ -850,7 +850,7 @@ public AnaliseSintatica() {
         
     }
     
-    
+    //alterado
     public void lista_const()
     {
         if(token.getStokem().equals("Identifier"))
@@ -945,7 +945,7 @@ public AnaliseSintatica() {
         }  
     }
     
-    
+    //alterado
     public void aux_declaracao()
     {
         if(token.getStokem().equals(";"))
@@ -1961,7 +1961,7 @@ public AnaliseSintatica() {
    
    }
     
-   //Inicialização de objetos-Recuperado erro: ok
+   //Inicialização de objetos-Recuperado erro: ok-alterado
    public void inicializa_objeto()
    {
        if(token.getStokem().equals("new"))
@@ -1991,7 +1991,7 @@ public AnaliseSintatica() {
    
    //Comandos
    
-   //while
+   //while-alterado
     public void While()
    {
         if(token.getStokem().equals("while"))
@@ -1999,33 +1999,43 @@ public AnaliseSintatica() {
             this.avancarToken();
             if(token.getStokem().equals("("))
             {
-                this.avancarToken();
-                this.exp();
-                if(token.getStokem().equals(")"))
-                {
+               this.avancarToken();         
+            }else
+            {
+                erro.add(new ErroSintatico("Faltou o ( no while",this.errorLinha));
+            }                
+            this.exp();
+            if(token.getStokem().equals(")"))
+            {
                     this.avancarToken();
-                    if(token.getStokem().equals("{"))
-                    {
-                        this.avancarToken();
-                        if(!token.getStokem().equals("}"))
-                        {
-                            this.conteudo_metodo();                        
-                        }
-                        if(token.getStokem().equals("}"))
-                        {
-                            this.avancarToken();                        
-                        }
+            }else
+            {
+                erro.add(new ErroSintatico("Faltou o ) no while",this.errorLinha));
+            }   
+             if(token.getStokem().equals("{"))
+             {
+                this.avancarToken();
                         
-                    }
-                }
-            }
+             }else
+             {
+                erro.add(new ErroSintatico("Faltou o { no while",this.errorLinha));                    
+             }
+              this.conteudo_metodo();        
+              if(token.getStokem().equals("}"))
+              {
+                   this.avancarToken();                        
+              }
+                        
+           }
+    }
+            
         
-        }
+        
    
    
-   }
    
-   //read
+   
+   //read-alterado
    public void read()
    {
         if(token.getStokem().equals("read"))
@@ -2034,6 +2044,10 @@ public AnaliseSintatica() {
             if(token.getStokem().equals("("))
             {
                 avancarToken();
+            }else
+            {
+                erro.add(new ErroSintatico("Faltou o ( no read",this.errorLinha));
+            }    
                 if(token.getStokem().equals("Identifier"))
                 {
                     avancarToken();
@@ -2059,8 +2073,7 @@ public AnaliseSintatica() {
                         System.err.println("faltou , ou ) no read: "+this.errorLinha);              
                     }
                 }            
-            }
-        }
+            }        
    
    }
    
@@ -2086,7 +2099,7 @@ public AnaliseSintatica() {
    
    }
    
-   //write
+   //write-alterado
    public void write()
    {
         if(token.getStokem().equals("write"))
@@ -2185,38 +2198,42 @@ public AnaliseSintatica() {
    }
    
    
-   //if
+   //if-alterado
    public void IF()
    {
       
      if(token.getStokem().equals("if"))
      {
-          avancarToken();    
-         if(token.getStokem().equals("("))
-         {
-            avancarToken();
-            exp();
-            if(token.getStokem().equals(")"))
-                {
-                    avancarToken();                    
-                    if(token.getStokem().equals("{"))
-                    {
-                        avancarToken();
-                        if(!token.getStokem().equals("}")){
-                            conteudo_metodo();
-                        }
-                        if(token.getStokem().equals("}"))
-                        {
-                            avancarToken();
-                            if(token.getStokem().equals("else")){
-                            complemento_if();
-                            }
-                        }
-                    
+          avancarToken();
+           if(token.getStokem().equals("("))
+           {
+                avancarToken();
+           }else
+           {
+               erro.add(new ErroSintatico("Faltou o ( no if",this.errorLinha));
+           }
+                    exp();
+           if(token.getStokem().equals(")"))
+            {
+               avancarToken(); 
+            }else
+            {
+             erro.add(new ErroSintatico("Faltou o ) no if",this.errorLinha));           
+            }            
+           if(token.getStokem().equals("{"))
+              {
+                 avancarToken();
+              }else
+              {
+                  erro.add(new ErroSintatico("Faltou o { no if",this.errorLinha));           
+              }   
+              conteudo_metodo();
+              if(token.getStokem().equals("}"))
+              {    avancarToken();
+                   if(token.getStokem().equals("else")){
+                      complemento_if();
                     }
-                }            
-         }
-     
+              }    
      }
    
    }
